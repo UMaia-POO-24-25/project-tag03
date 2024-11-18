@@ -1,21 +1,15 @@
-## POO_GX - PROJECT NAME
+## POO_03 - BOMBING SNAKE
 
-> Include here one or two paragraphs explaining the main idea of the project, followed by a sentence identifying who the authors are.
-
-**Example**:
-
-In this exciting platform game you can help KangarooBoy save the world, by collecting all the coins throughout ten different levels in which you will […].
-
-This project was developed by *John Doe* (*john.doe*@umaia.pt) and *Jane Doe* (*jane.doe*@umaia.pt) for POO 2023⁄24.
+In this game you will guide the snake in a limited space to collect food while avoiding bombs and the snake's own body which grows as it eats.
+This project was developed by *Beatriz Almeida* (*a044416*@umaia.pt) and *Carolina Fernandes* (*a044897*@umaia.pt) for POO 2024⁄25.
 
 ### IMPLEMENTED FEATURES
 
-> This section should contain a list of implemented features and their descriptions. In the end of the section, include two or three screenshots that illustrate the most important features.
-
-**Examples**:
-
-- **Jumping** - The game character will jump when the space bar key is pressed.
-- **Getting hidden coins** - When the game character hits a platform from below (by jumping beneath it) it will smash that segment of the platform and will get any coins that may exist hidden there.
+- **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the arrow keys.
+- **Food Collection** - The snake grows in length each time it eats food, and the player's score increases accordingly.
+- **Collisions** - The game ends if the snake collides with the walls or its own tail.
+- **Dynamic Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
+- **Score Display** - The current score is displayed on the screen in real-time.
 
 ### PLANNED FEATURES
 
