@@ -30,4 +30,5 @@ public class Application {
     private void start() {
         System.out.println("Jogo iniciado!");
     }
+
 }
