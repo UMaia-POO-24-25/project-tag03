@@ -6,29 +6,16 @@ import java.io.IOException;
 
 public class Application {
 
-    public Application(Screen screen) {
-    }
-
     public static void main(String[] args) {
         try {
-            // Configurando o terminal e a tela
-            Screen screen = new DefaultTerminalFactory()
-                    .setInitialTerminalSize(new TerminalSize(60, 30))
-                    .createScreen();
-            screen.startScreen();
+            Game game = new Game(60, 30);
 
-            // Inicializando o jogo
-            Application game = new Application(screen);
+            // Iniciando o jogo
             game.start();
 
         } catch (IOException e) {
-            System.err.println("Erro ao iniciar a aplicação: " + e.getMessage());
+            System.err.println("Erro ao iniciar o jogo: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
-    private void start() {
-        System.out.println("Jogo iniciado!");
-    }
-
 }
