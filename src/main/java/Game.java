@@ -21,7 +21,7 @@ public class Game {
 
         s = new Snake();
 
-        this.width = 30;
+        this.width = 60;
         this.height = 30;
 
         TerminalSize terminalSize = new TerminalSize(width, height);
