@@ -23,8 +23,8 @@ public class Snake {
         this.y += yspeed;
 
 
-        if (this.x > 30-grid){
-            this.x = 30-grid;
+        if (this.x > 60-grid){
+            this.x = 60-grid;
         } else if (this.x < 0){
             this.x = 0;
         } else if (this.y > 30-grid){
