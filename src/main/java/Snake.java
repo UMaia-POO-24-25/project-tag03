@@ -38,8 +38,6 @@ public class Snake {
         graphics.fillRectangle(new TerminalPosition(this.x, this.y), new TerminalSize(1, 1), ' '); // Desenha a cobra
     }
     public void dir(int x, int y){
-        this.xspeed = x;
-        this.yspeed= y;
         this.xspeed = x*grid;
         this.yspeed= y*grid;
     }

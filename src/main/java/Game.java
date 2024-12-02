@@ -20,11 +20,13 @@ public class Game {
     private int grid;
 
     public Game() throws IOException {
+
         s = new Snake(grid, grid);
 
         this.grid = 1;
-        this.width = 30;
+        this.width = 60;
         this.height = 30;
+
         TerminalSize terminalSize = new TerminalSize(width, height);
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
                 .setInitialTerminalSize(terminalSize)
