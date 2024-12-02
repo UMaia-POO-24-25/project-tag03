@@ -8,26 +8,28 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.TerminalPosition;
-
+import java.util.Random;
 
 import java.io.IOException;
 
 public class Game {
     private Screen screen;
-    private int width;
-    private int height;
+    private final int width;
+    private final int height;
     private Snake s;
     private Food f;
-    private int grid;
+    private final int grid;
 
     public Game() throws IOException {
 
-
+        Random rand = new Random();
         this.grid = 1;
         this.width = 60;
         this.height = 30;
+        int foodx = rand.nextInt(width);
+        int foody = rand.nextInt(height);
         s = new Snake(grid, grid);
-        f = new Food();
+        f = new Food(foodx, foody);
 
         TerminalSize terminalSize = new TerminalSize(width, height);
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
@@ -46,9 +48,9 @@ public class Game {
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         s.update();
         s.show(graphics);
-        if (s.eat(f) == true){
+        /* if (s.eat(f) == true){
             f.show(graphics);
-        }
+        }*/
         f.show(graphics);
         screen.refresh();
     }
@@ -72,13 +74,13 @@ public class Game {
 
     private void processKey(KeyStroke key) throws IOException {
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w') {
-            s.dir(0, -1);
+            s.dir(0, -grid);
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'd') {
-            s.dir(1, 0);
+            s.dir(grid, 0);
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'a') {
-            s.dir(-1, 0);
+            s.dir(-grid, 0);
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 's') {
-            s.dir(0, 1);
+            s.dir(0, grid);
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
             screen.close();
         } else if (key.getKeyType() == KeyType.EOF) {

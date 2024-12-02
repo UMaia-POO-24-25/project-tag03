@@ -5,46 +5,38 @@ import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import javax.swing.text.Position;
 
-public class Snake {
-    public int x, y; // Coordenadas da cobra
-    public int xspeed, yspeed;
-    public int grid;
+public class Snake extends Arena{
+    public int xspeed;
+    public int yspeed;
 
     public Snake(int x, int y){
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.xspeed = 1; // Movimento inicial para a direita
         this.yspeed = 0;
-        this.grid = 1;
     }
 
     public void update(){
-        this.x += xspeed; // Atualiza a posição baseada na velocidade
-        this.y += yspeed;
+        position.setX(position.getX() + xspeed);
+        position.setY(position.getY() + yspeed);
 
-
-        if (this.x > 60-grid){
-            this.x = 60-grid;
-        } else if (this.x < 0){
-            this.x = 0;
-        } else if (this.y > 30-grid){
-            this.y = 30-grid;
-        } else if (this.y < 0){
-            this.y = 0;
+        if (position.getX() > 60-1){
+            position.setX(60-1);
+        } else if (position.getX() < 0){
+            position.setX(0);
+        } else if (position.getY() > 30-1){
+            position.setY(30-1);
+        } else if (position.getY() < 0){
+            position.setY(0);
         }
     }
 
     public void show(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFFFF"));
-        graphics.fillRectangle(new TerminalPosition(this.x, this.y), new TerminalSize(grid, grid), ' '); // Desenha a cobra
+        graphics.fillRectangle(new TerminalPosition(position.getX(), position.getY()), new TerminalSize(1, 1), ' '); // Desenha a cobra
     }
     public void dir(int x, int y){
-        this.xspeed = x*grid;
-        this.yspeed= y*grid;
+        this.xspeed = x*1;
+        this.yspeed= y*1;
     }
 
-    public boolean eat(Food food){
-
-        return false;
-    }
 }
