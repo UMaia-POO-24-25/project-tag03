@@ -44,9 +44,12 @@ public class Game {
         TextGraphics graphics = screen.newTextGraphics();
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        s.show(graphics);
-        f.show(graphics);
         s.update();
+        s.show(graphics);
+        if (s.eat(f) == true){
+            f.show(graphics);
+        }
+        f.show(graphics);
         screen.refresh();
     }
     public void run() throws IOException {

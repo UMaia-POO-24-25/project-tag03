@@ -12,6 +12,7 @@ public class Food {
 
     public Food(){
         Random rand = new Random();
+        this.grid = 1;
         this.x = rand.nextInt(30);
         this.y = rand.nextInt(30);
     }
@@ -19,7 +20,7 @@ public class Food {
 
     public void show(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#FF0000"));
-        graphics.fillRectangle(new TerminalPosition(this.x, this.y), new TerminalSize(1, 1), ' ');
+        graphics.fillRectangle(new TerminalPosition(this.x, this.y), new TerminalSize(grid, grid), ' ');
     }
 
 }
