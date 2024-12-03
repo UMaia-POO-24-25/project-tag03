@@ -39,4 +39,12 @@ public class Snake extends Arena{
         this.yspeed= y*1;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
+    public boolean eat(Position position) {
+        return this.position.equals(position);
+    }
+
 }

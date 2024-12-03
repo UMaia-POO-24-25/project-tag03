@@ -22,14 +22,11 @@ public class Game {
 
     public Game() throws IOException {
 
-        Random rand = new Random();
         this.grid = 1;
         this.width = 60;
         this.height = 30;
-        int foodx = rand.nextInt(width);
-        int foody = rand.nextInt(height);
-        s = new Snake(grid, grid);
-        f = new Food(foodx, foody);
+        this.s = new Snake(grid, grid);
+        this.f = createFood();
 
         TerminalSize terminalSize = new TerminalSize(width, height);
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
@@ -41,16 +38,25 @@ public class Game {
         screen.startScreen();
         screen.doResizeIfNecessary();
     }
+
+    public Food createFood(){
+        Random rand = new Random();
+        int foodx = rand.nextInt(width);
+        int foody = rand.nextInt(height);
+        return new Food(foodx, foody);
+    }
+
     public void draw() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
+        f.show(graphics);
         s.update();
         s.show(graphics);
-        /* if (s.eat(f) == true){
-            f.show(graphics);
-        }*/
+        if (s.eat(f.getPosition())){
+            f = createFood();
+        }
         f.show(graphics);
         screen.refresh();
     }
