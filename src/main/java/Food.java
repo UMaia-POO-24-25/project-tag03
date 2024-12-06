@@ -12,13 +12,8 @@ public class Food extends Arena{
     }
 
 
-    public void show(TextGraphics graphics){
+    public void show(TextGraphics graphics,int width, int height) {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#FF0000"));
-        graphics.fillRectangle(new TerminalPosition(position.getX(), position.getY()), new TerminalSize(1, 1), ' ');
-    }
-
-    public Position getPosition(){
-        return position;
     }
 
 }

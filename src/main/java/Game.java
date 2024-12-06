@@ -15,15 +15,13 @@ import java.util.Random;
 import java.io.IOException;
 
 public class Game {
-    private Screen screen;
-    private Map map;
-    private final int width;
-    private final int height;
+    private final Screen screen;
+    private final Map map;
 
     public Game() throws IOException {
 
-        this.width = 60;
-        this.height = 30;
+        int width = 30;
+        int height = 30;
         this.map = new Map(width, height);
 
         TerminalSize terminalSize = new TerminalSize(width, height);
@@ -40,12 +38,6 @@ public class Game {
         screen.doResizeIfNecessary();
     }
 
-    public Food createFood(){
-        Random rand = new Random();
-        int foodx = rand.nextInt(width);
-        int foody = rand.nextInt(height);
-        return new Food(foodx, foody);
-    }
 
     private void show() throws IOException {
         screen.clear();

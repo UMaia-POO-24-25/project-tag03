@@ -7,5 +7,5 @@ public abstract class Arena {
         this.position = new Position(x, y);
     }
 
-    public abstract void show(TextGraphics graphics);
+    public abstract void show(TextGraphics graphics, int width, int height);
 }
