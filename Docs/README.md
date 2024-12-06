@@ -8,7 +8,7 @@ This project was developed by *Beatriz Almeida* (*a044416*@umaia.pt) and *Caroli
 - **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the arrow keys.
 - **Food Collection** - The snake grows in length each time it eats food, and the player's score increases accordingly.
 - **Collisions** - The game ends if the snake collides with the walls or its own tail.
-- **Dynamic Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
+- **Dynamic Logic.Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
 - **Score Display** - The current score is displayed on the screen in real-time.
 
 ### PLANNED FEATURES

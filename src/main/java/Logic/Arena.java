@@ -1,3 +1,5 @@
+package Logic;
+
 import com.googlecode.lanterna.graphics.TextGraphics;
 
 public abstract class Arena {

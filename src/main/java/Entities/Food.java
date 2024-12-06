@@ -1,9 +1,8 @@
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TerminalSize;
+package Entities;
+
+import Logic.Rectangle;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
-
-import javax.swing.text.Position;
 
 
 public class Food extends Arena{

@@ -1,3 +1,7 @@
+package Logic;
+
+import Entities.Food;
+import Entities.Snake;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
