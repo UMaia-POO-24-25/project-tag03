@@ -4,18 +4,27 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import javax.swing.text.Position;
+import java.util.ArrayList;
 
 public class Snake extends Arena{
     public int xspeed;
     public int yspeed;
+    public int total;
+    public ArrayList<Position> tail;
 
     public Snake(int x, int y){
         super(x, y);
         this.xspeed = 1; // Movimento inicial para a direita
         this.yspeed = 0;
+        this.total = 0;
+        this.tail = new ArrayList<>();
     }
 
     public void update(){
+        this.tail.add(0, new Position(this.position.getX(), this.position.getY()));
+        if (this.tail.size() > this.total + 1) {
+            this.tail.remove(this.tail.size() - 1);
+        }
         position.setX(position.getX() + xspeed);
         position.setY(position.getY() + yspeed);
 
@@ -32,8 +41,13 @@ public class Snake extends Arena{
 
     public void show(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFFFF"));
-        graphics.fillRectangle(new TerminalPosition(position.getX(), position.getY()), new TerminalSize(1, 1), ' '); // Desenha a cobra
+        for (Position pos : this.tail) {
+            graphics.fillRectangle(
+                    new TerminalPosition(pos.getX(), pos.getY()),
+                    new TerminalSize(1, 1), ' ');
+        }
     }
+
     public void dir(int x, int y){
         this.xspeed = x*1;
         this.yspeed= y*1;
@@ -44,7 +58,11 @@ public class Snake extends Arena{
     }
 
     public boolean eat(Position position) {
-        return this.position.equals(position);
+        if (this.position.equals(position)) {
+            this.total += 1;
+            return true;
+        }
+        return false;
     }
 
 }
