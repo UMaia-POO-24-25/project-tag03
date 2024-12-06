@@ -47,6 +47,14 @@ public class Snake extends Arena{
                     new TerminalSize(1, 1), ' ');
         }
     }
+    public boolean death() {
+        for (int i = 1; i < this.tail.size(); i++) {
+            if (this.position.equals(this.tail.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void dir(int x, int y){
         this.xspeed = x*1;
