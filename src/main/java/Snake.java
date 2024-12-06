@@ -28,15 +28,7 @@ public class Snake extends Arena{
         position.setX(position.getX() + xspeed);
         position.setY(position.getY() + yspeed);
 
-        if (position.getX() > 60-1){
-            position.setX(60-1);
-        } else if (position.getX() < 0){
-            position.setX(0);
-        } else if (position.getY() > 30-1){
-            position.setY(30-1);
-        } else if (position.getY() < 0){
-            position.setY(0);
-        }
+        checkWalls();
     }
 
     public void show(TextGraphics graphics){
@@ -47,6 +39,20 @@ public class Snake extends Arena{
                     new TerminalSize(1, 1), ' ');
         }
     }
+
+    public boolean checkWalls(){
+        if (position.getX() == 30) {
+            return true;
+        } else if (position.getX() == 0) {
+            return true;
+        } else if (position.getY() == 30) {
+            return true;
+        } else if (position.getY() == 0) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean death() {
         for (int i = 1; i < this.tail.size(); i++) {
             if (this.position.equals(this.tail.get(i))) {
@@ -57,6 +63,12 @@ public class Snake extends Arena{
     }
 
     public void dir(int x, int y){
+
+        if (this.total > 0) {
+            if ((x != 0 && x == -xspeed) || (y != 0 && y == -yspeed)) {
+                return;
+            }
+        }
         this.xspeed = x*1;
         this.yspeed= y*1;
     }

@@ -55,9 +55,8 @@ public class Game {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         f.show(graphics);
-        if (s.death()){
-            screen.close();
-            System.out.print("Game Over!");
+        if (s.death() || s.checkwalls()){
+            gameover(screen);
         }
         s.update();
         s.show(graphics);
@@ -66,6 +65,10 @@ public class Game {
         }
         f.show(graphics);
         screen.refresh();
+    }
+    public void gameover(Screen screen) throws IOException {
+        screen.close();
+        System.out.print("Game Over!");
     }
 
     public void run() throws IOException {
