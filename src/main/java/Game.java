@@ -29,10 +29,13 @@ public class Game {
         this.f = createFood();
 
         TerminalSize terminalSize = new TerminalSize(width, height);
+
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
                 .setInitialTerminalSize(terminalSize)
                 .setForceAWTOverSwing(true);
+
         Terminal terminal = terminalFactory.createTerminal();
+
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
         screen.startScreen();
@@ -52,6 +55,10 @@ public class Game {
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
         f.show(graphics);
+        if (s.death()){
+            screen.close();
+            System.out.print("Game Over!");
+        }
         s.update();
         s.show(graphics);
         if (s.eat(f.getPosition())){
@@ -60,6 +67,7 @@ public class Game {
         f.show(graphics);
         screen.refresh();
     }
+
     public void run() throws IOException {
         while (true) {
             draw();
