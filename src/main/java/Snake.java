@@ -28,7 +28,6 @@ public class Snake extends Arena{
         position.setX(position.getX() + xspeed);
         position.setY(position.getY() + yspeed);
 
-        checkWalls();
     }
 
     public void show(TextGraphics graphics){
@@ -40,18 +39,7 @@ public class Snake extends Arena{
         }
     }
 
-    public boolean checkWalls(){
-        if (position.getX() == 30) {
-            return true;
-        } else if (position.getX() == 0) {
-            return true;
-        } else if (position.getY() == 30) {
-            return true;
-        } else if (position.getY() == 0) {
-            return true;
-        }
-        return false;
-    }
+
 
     public boolean death() {
         for (int i = 1; i < this.tail.size(); i++) {

@@ -8,25 +8,23 @@ import com.googlecode.lanterna.terminal.Terminal;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.TerminalPosition;
+
+import java.util.Map;
 import java.util.Random;
 
 import java.io.IOException;
 
 public class Game {
     private Screen screen;
+    private Map map;
     private final int width;
     private final int height;
-    private Snake s;
-    private Food f;
-    private final int grid;
 
     public Game() throws IOException {
 
-        this.grid = 1;
         this.width = 60;
         this.height = 30;
-        this.s = new Snake(grid, grid);
-        this.f = createFood();
+        this.map = new Map(width, height);
 
         TerminalSize terminalSize = new TerminalSize(width, height);
 
@@ -49,36 +47,31 @@ public class Game {
         return new Food(foodx, foody);
     }
 
-    public void draw() throws IOException {
+    private void show() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
-        graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        f.show(graphics);
-        if (s.death() || s.checkwalls()){
-            gameover(screen);
-        }
-        s.update();
-        s.show(graphics);
-        if (s.eat(f.getPosition())){
-            f = createFood();
-        }
-        f.show(graphics);
+
+        map.show(graphics);
         screen.refresh();
     }
-    public void gameover(Screen screen) throws IOException {
+    private void gameover() throws IOException {
         screen.close();
         System.out.print("Game Over!");
     }
 
     public void run() throws IOException {
         while (true) {
-            draw();
+            map.updateSnake();
+            show();
             KeyStroke key = screen.pollInput();
 
 
             if (key != null) {
                 processKey(key);
+            }
+
+            if (map.getGameOver()){
+                gameover();
             }
 
             try {
@@ -91,13 +84,13 @@ public class Game {
 
     private void processKey(KeyStroke key) throws IOException {
         if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'w') {
-            s.dir(0, -grid);
+            map.moveSnakeUp();
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'd') {
-            s.dir(grid, 0);
+            map.moveSnakeRight();
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'a') {
-            s.dir(-grid, 0);
+            map.moveSnakeLeft();
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 's') {
-            s.dir(0, grid);
+            map.moveSnakeDown();
         } else if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
             screen.close();
         } else if (key.getKeyType() == KeyType.EOF) {
