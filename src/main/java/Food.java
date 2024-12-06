@@ -3,6 +3,8 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 
+import javax.swing.text.Position;
+
 
 public class Food extends Arena{
     public Food(int x, int y){
