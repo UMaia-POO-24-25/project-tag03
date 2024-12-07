@@ -40,7 +40,6 @@ public class Game {
     private void show() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
-
         map.show(graphics);
         screen.refresh();
     }
