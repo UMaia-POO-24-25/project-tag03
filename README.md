@@ -5,7 +5,6 @@
 
 ---
 
-# Event Management System
 Repository to host the project developed for **'Programação orientada a objetos'**, a subject in the 2nd year of the University of Maia, Informatics Course. Developed by Group 03: [@Carolfbar](https://github.com/Carolfbar),[@BeatrizASLima](https://github.com/BeatrizASLima).
 
 ---
