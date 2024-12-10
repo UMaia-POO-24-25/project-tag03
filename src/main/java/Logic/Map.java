@@ -13,9 +13,9 @@ public class Map {
     private final int height;
     private final int width;
     private final int grid;
-    private Snake s;
+    public Snake s;
     private Food f;
-    private Bomb b;
+    public Bomb b;
     private boolean gameOver;
     private String foodColor;
     private String bombColor;
@@ -101,7 +101,7 @@ public class Map {
         return new Food(fx, fy, foodColor);
     }
 
-    private Bomb createBomb() {
+    public Bomb createBomb() {
         Random rand = new Random();
         int bx = rand.nextInt(width);
         int by = rand.nextInt(height);

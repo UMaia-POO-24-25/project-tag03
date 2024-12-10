@@ -10,10 +10,10 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import java.util.ArrayList;
 
 public class Snake extends Arena {
-    private int xspeed;
-    private int yspeed;
+    public int xspeed;
+    public int yspeed;
     private int total;
-    private ArrayList<Position> tail;
+    public ArrayList<Position> tail;
 
     public Snake(int x, int y){
         super(x, y);
