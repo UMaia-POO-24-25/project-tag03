@@ -5,15 +5,14 @@ This project was developed by *Beatriz Almeida* (*a044416*@umaia.pt) and *Caroli
 
 ### IMPLEMENTED FEATURES
 
-- **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the arrow keys.
+- **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the w,s,a and d keys.
 - **Food Collection** - The snake grows in length each time it eats food, and the player's score increases accordingly.
 - **Collisions** - The game ends if the snake collides with the walls or its own tail.
-- **Dynamic Logic.Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
-- **Score Display** - The current score is displayed on the screen in real-time.
+- **Dynamic Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
 
 ### PLANNED FEATURES
 
-> This section is similar to the previous one but should list the features that are not yet implemented. Instead of screenshots you should include GUI mock-ups for the planned features.
+- **Bombs** - The game ends if the snake collides with the bombs.
 
 ### DESIGN
 
