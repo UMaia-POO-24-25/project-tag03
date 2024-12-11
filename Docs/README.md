@@ -76,6 +76,8 @@ A way to improve the code would be to move the `isPlatformSegmentSolid()` method
 ### TESTING
 
 - Screenshot of coverage report.
+![image](https://github.com/user-attachments/assets/df8d43e8-991f-424e-ad51-120632767375)
+
 - Link to mutation testing report.
 
 ### SELF-EVALUATION
