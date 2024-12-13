@@ -79,6 +79,7 @@ The snake's body was managed as a simple list of positions, and collision detect
 The **Composite Pattern** was used to treat the snake's body as a composed entity. This makes managing the body and collision detection easier, keeping the design cleaner and more modular.
 
 **Implementation**
+
 In the code:
 
 Snake.update() adds new positions to the body and maintains the correct size.
