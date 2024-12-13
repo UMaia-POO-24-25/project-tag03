@@ -1,3 +1,4 @@
+
 ## POO_03 - BOMBING SNAKE
 
 In this game you will guide the snake in a limited space to collect food while avoiding bombs and the snake's own body which grows as it eats.
@@ -5,85 +6,111 @@ This project was developed by *Beatriz Almeida* (*a044416*@umaia.pt) and *Caroli
 
 ### IMPLEMENTED FEATURES
 
-- **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the arrow keys.
+- **Movement** - The snake moves in the four cardinal directions (up, down, left, right) using the w,s,a and d keys.
 - **Food Collection** - The snake grows in length each time it eats food, and the player's score increases accordingly.
 - **Collisions** - The game ends if the snake collides with the walls or its own tail.
-- **Dynamic Logic.Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
-- **Score Display** - The current score is displayed on the screen in real-time.
+- **Dynamic Game Speed** - As the player collects more food, the game speed increases, making it progressively more challenging.
 
 ### PLANNED FEATURES
 
-> This section is similar to the previous one but should list the features that are not yet implemented. Instead of screenshots you should include GUI mock-ups for the planned features.
+- **Bombs** - The game ends if the snake collides with the bombs.
 
-### DESIGN
 
-> This section should be organized in different subsections, each describing a different design problem that you had to solve during the project. Each subsection should be organized in four different parts:
-
-- **Problem in Context.** The description of the design context and the concrete problem that motivated the instantiation of the pattern. Someone else other than the original developer should be able to read and understand all the motivations for the decisions made. When refering to the implementation before the pattern was applied, don’t forget to [link to the relevant lines of code](https://help.github.com/en/articles/creating-a-permanent-link-to-a-code-snippet) in the appropriate version.
-- **The Pattern.** Identify the design pattern to be applied, why it was selected and how it is a good fit considering the existing design context and the problem at hand.
-- **Implementation.** Show how the pattern roles, operations and associations were mapped to the concrete design classes. Illustrate it with a UML class diagram, and refer to the corresponding source code with links to the relevant lines (these should be [relative links](https://help.github.com/en/articles/about-readmes#relative-links-and-image-paths-in-readme-files). When doing this, always point to the latest version of the code.
-- **Consequences.** Benefits and liabilities of the design after the pattern instantiation, eventually comparing these consequences with those of alternative solutions.
-
-**Example of one of such subsections**:
-
-------
-
-#### THE JUMP ACTION OF THE KANGAROOBOY SHOULD BEHAVE DIFFERENTLY DEPENDING ON ITS STATE
+### THE CREATION OF FOOD AND BOMB OBJECTS
 
 **Problem in Context**
 
-There was a lot of scattered conditional logic when deciding how the KangarooBoy should behave when jumping, as the jumps should be different depending on the items that came to his possession during the game (an helix will alow him to fly, driking a potion will allow him to jump double the height, etc.). This is a violation of the **Single Responsability Principle**. We could concentrate all the conditional logic in the same method to circumscribe the issue to that one method but the **Single Responsability Principle** would still be violated.
+In the initial game design, creating Food and Bomb objects was repetitive and scattered throughout the code. This duplication made the code harder to maintain and increased the chance of mistakes if the creation logic needed changes. Additionally, the Map class had too many responsibilities, managing both game logic and object creation, which goes against the **Single Responsibility Principle**.
 
 **The Pattern**
 
-We have applied the **State** pattern. This pattern allows you to represent different states with different subclasses. We can switch to a different state of the application by switching to another implementation (i.e., another subclass). This pattern allowed to address the identified problems because […].
+We used the **Factory Method** pattern to centralize the creation process. This pattern encapsulates object creation in dedicated methods, making it easier to maintain and adapt. It also separates the object creation logic from the Map class.
 
 **Implementation**
 
-The following figure shows how the pattern’s roles were mapped to the application classes.
+The following figure shows how the Factory Method pattern was mapped to the design:
 
-![img](https://www.fe.up.pt/~arestivo/page/img/examples/lpoo/state.svg)
+![image](https://github.com/user-attachments/assets/d5b3837b-45fd-4c68-b254-147663d8b630)
 
-These classes can be found in the following files:
 
-- [Character](https://web.fe.up.pt/~arestivo/page/courses/2021/lpoo/template/src/main/java/Character.java)
-- [JumpAbilityState](https://web.fe.up.pt/~arestivo/page/courses/2021/lpoo/template/src/main/java/JumpAbilityState.java)
-- [DoubleJumpState](https://web.fe.up.pt/~arestivo/page/courses/2021/lpoo/template/src/main/java/DoubleJumpState.java)
-- [HelicopterState](https://web.fe.up.pt/~arestivo/page/courses/2021/lpoo/template/src/main/java/HelicopterState.java)
-- [IncreasedGravityState](https://web.fe.up.pt/~arestivo/page/courses/2021/lpoo/template/src/main/java/IncreasedGravityState.java)
+The relevant code implementation can be found in:
+
+- [Map.createFood()]
+
+- [Map.createBomb()]
+
+**Consequences**
+  Benefits:
+  - Less duplication, making code easier to maintain.
+  - Easier to add new object.
+  Disadvantages:
+  - Slightly more complex code due to additional methods for object creation.
+------
+### SNAKE MOVEMENT AND DIRECTION LOGIC
+**Problem in Context**
+
+Originally, snake movement was controlled by separate methods like moveSnakeUp() and moveSnakeDown(). This approach led to scattered movement logic and made it harder to prevent errors, such as the snake immediately reversing direction.
+
+**The Pattern**
+
+The **Strategy Pattern** was implemented to manage movement. This pattern separates movement behaviors into strategies, which can be dynamically changed during gameplay.
+
+**Implementation**
+
+The Strategy pattern is applied as shown in the diagram:
+![image](https://github.com/user-attachments/assets/bb1283d7-2ba2-4281-92a4-19d2f02eddd0)
 
 **Consequences**
 
-The use of the State Pattern in the current design allows the following benefits:
-
-- The several states that represent the character’s hability to jump become explicit in the code, instead of relying on a series of flags.
-- We don’t need to have a long set of conditional if or switch statements associated with the various states; instead, polimorphism is used to activate the right behavior.
-- There are now more classes and instances to manage, but still in a reasonable number.
-
-#### KNOWN CODE SMELLS AND REFACTORING SUGGESTIONS
-
-> This section should describe 3 to 5 different code smells that you have identified in your current implementation, and suggest ways in which the code could be refactored to eliminate them. Each smell and refactoring suggestions should be described in its own subsection.
-
-**Example of such a subsection**:
-
+  Benefits:
+  - Centralized movement logic.
+  - Safer gameplay, with rules to prevent reversing direction.
+  - Easier to add new movement features without changing existing code.
+  Disadvantages:
+  - Slightly more complex code due to the use of strategies.
+    
 ------
 
-#### DATA CLASS
+### Snake's Body Growth and Collision Detection
 
-The `PlatformSegment` class is a **Data Class**, as it contains only fields, and no behavior. This is problematic because […].
+**Problem Context**
+The snake's body was managed as a simple list of positions, and collision detection was done using loops in the update() method, concentrating many responsibilities in a single function.
 
-A way to improve the code would be to move the `isPlatformSegmentSolid()` method to the `PlatformSegment` class, as this logic is purely concerned with the `PlatformSegment` class.
+**Pattern Used**
+The **Composite Pattern** was used to treat the snake's body as a composed entity. This makes managing the body and collision detection easier, keeping the design cleaner and more modular.
+
+**Implementation**
+
+In the code:
+
+Snake.update() adds new positions to the body and maintains the correct size.
+Snake.death() checks for collisions with the snake's own body.
+
+The diagram reflects the composition of the snake's body (a list of Position).
+
+![image](https://github.com/user-attachments/assets/3aec4f12-623e-4db9-90b0-4f4ba39992e4)
+
+
+**Consequences**
+  Benefits:
+  - Easier management of the body and collision detection.
+  - Scalable for future improvements (e.g., obstacles or power-ups).
+  Disadvantages:
+  - More memory usage due to storing multiple positions.
+
 
 ### TESTING
 
 - Screenshot of coverage report.
+![image](https://github.com/user-attachments/assets/df8d43e8-991f-424e-ad51-120632767375)
+
 - Link to mutation testing report.
 
 ### SELF-EVALUATION
 
-> In this section describe how the work regarding the project was divided between the students. In the event that members of the group do not agree on a work distribution, the group should send an email to the teacher explaining the disagreement.
+> Our group work was well divided, with each member. We made sure our contribute was equal.
 
 **Example**:
 
-- John Doe: 40%
-- Jane Doe: 60%
+- Beatriz Almeida: 50%
+- Carolina Fernandes: 50%
