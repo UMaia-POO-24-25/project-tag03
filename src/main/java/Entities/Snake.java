@@ -33,6 +33,9 @@ public class Snake extends Arena {
         }
 
     }
+    public Position getPosition() {
+        return this.position;
+    }
 
     public void show(TextGraphics graphics, int width, int height){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#FFFFFF"));

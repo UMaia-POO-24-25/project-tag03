@@ -10,10 +10,15 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 
 public class Food extends Arena {
     private String color;
+    public Position position;
 
     public Food(int x, int y, String color){
         super(x, y);
         this.color = color;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
 
