@@ -55,10 +55,15 @@ public class Map {
     }
 
     private boolean checkDeath(){
-        if (s.position.getX()== width || s.position.getX() == -GRID_SIZE ||
-                s.position.getY() == height || s.position.getY() == -GRID_SIZE) {
+        int offsetX = 1;
+        int offsetY = 1;
+
+        if (s.position.getX()== width + offsetX  || s.position.getX() < offsetX ||
+                s.position.getY() == height + offsetY || s.position.getY()  < offsetY) {
+            message = "Fora dos limites!";
             return true;
         }
+
        if (inBomb(b.position)){
            message = "bomb!";
             return true;
@@ -83,6 +88,7 @@ public class Map {
     public boolean eat(Position position) {
         if (position.equals(s.position)) {
             s.setTotal(GRID_SIZE);
+            score += 10;
             return true;
         }
         return false;

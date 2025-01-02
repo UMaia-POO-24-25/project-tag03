@@ -40,9 +40,18 @@ public class Game {
     private void show() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
+
+
+        TerminalSize screenSize = screen.getTerminalSize();
+        int width = screenSize.getColumns();
+
+        String header = "Pontuação: " + map.getScore();
+        graphics.putString((width - header.length()) / 2, 0, header);
+
         map.show(graphics, 1, 1);
         screen.refresh();
     }
+
     private void gameover() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
