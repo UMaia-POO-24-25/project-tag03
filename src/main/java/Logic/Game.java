@@ -40,7 +40,7 @@ public class Game {
     private void show() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
-        map.show(graphics);
+        map.show(graphics, 1, 1);
         screen.refresh();
     }
     private void gameover() throws IOException {
@@ -82,7 +82,9 @@ public class Game {
 
     public void run() throws IOException {
         long lastUpdate = System.currentTimeMillis();
+        long lastBombUpdate = System.currentTimeMillis();
         long updateInterval = 100;
+        long bombUpdateInterval = 3000;
 
         while (true) {
             long now = System.currentTimeMillis();
@@ -95,6 +97,12 @@ public class Game {
                     gameover();
                     break;
                 }
+            }
+
+            if (now - lastBombUpdate >= bombUpdateInterval) {
+                map.updateBomb();
+                show();
+                lastBombUpdate = now;
             }
 
             KeyStroke key = screen.pollInput();

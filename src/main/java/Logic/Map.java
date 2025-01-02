@@ -14,6 +14,7 @@ public class Map {
     private static final int GRID_SIZE = 1;
     private static final String FOOD_COLOR = "#FF0000";
     private static final String BOMB_COLOR = "#000000";
+    private int score = 0;
 
     private final int height;
     private final int width;
@@ -32,12 +33,12 @@ public class Map {
         this.gameOver = false;
     }
 
-    public void show(TextGraphics graphics){
+    public void show(TextGraphics graphics,  int offsetX, int offsetY){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
-        graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        f.show(graphics, GRID_SIZE, GRID_SIZE);
-        s.show(graphics, GRID_SIZE, GRID_SIZE);
-        b.show(graphics, GRID_SIZE, GRID_SIZE);
+        graphics.fillRectangle(new TerminalPosition(offsetX, offsetY), new TerminalSize(width, height), ' ');
+        f.show(graphics, offsetX, offsetY);
+        s.show(graphics, offsetX, offsetY);
+        b.show(graphics, offsetX, offsetY);
     }
 
     public void moveSnakeUp(){
@@ -92,21 +93,42 @@ public class Map {
     }
 
     public Food createFood(){
-        int fx = rand.nextInt(width);
-        int fy = rand.nextInt(height);
+        int fx, fy;
+        do {
+            fx = 1 + rand.nextInt(width - 2);
+            fy = 1 + rand.nextInt(height - 2);
+        } while (fx == s.position.getX() && fy == s.position.getY());
         return new Food(fx, fy, FOOD_COLOR);
     }
 
     public Bomb createBomb() {
         int bx, by;
         do {
-            bx = rand.nextInt(width);
-            by = rand.nextInt(height);
-        } while (bx == f.position.getX() && by == f.position.getY());
+            bx = 1 + rand.nextInt(width - 2);
+            by = 1 + rand.nextInt(height - 2);
+        } while ((bx == f.position.getX() && by == f.position.getY()) ||
+                (bx == s.position.getX() && by == s.position.getY()));
             return new Bomb(bx, by, BOMB_COLOR);
     }
+
+    public void updateBomb() {
+        int bx, by;
+        do {
+            bx = 1 + rand.nextInt(width - 2);
+            by = 1 + rand.nextInt(height - 2);
+        } while ((bx == f.position.getX() && by == f.position.getY()) ||
+                (bx == s.position.getX() && by == s.position.getY()) ||
+                (Math.abs(bx - s.position.getX()) + Math.abs(by - s.position.getY()) < 5));
+        b.setPosition(new Position(bx, by));
+    }
+
     public int getHeight() {
         return height;
+    }
+
+    public int getScore() {
+
+        return score;
     }
 
     public int getWidth() {
