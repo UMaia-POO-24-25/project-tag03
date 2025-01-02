@@ -10,24 +10,23 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import java.util.Random;
 
 public class Map {
+    private static final Random rand = new Random();
+    private static final int GRID_SIZE = 1;
+    private static final String FOOD_COLOR = "#FF0000";
+    private static final String BOMB_COLOR = "#000000";
+
     private final int height;
     private final int width;
-    private final int grid;
     public Snake s;
     private Food f;
     public Bomb b;
     private boolean gameOver;
-    private String foodColor;
-    private String bombColor;
-
+    public String message;
 
     public Map(int width, int height){
         this.height = height;
         this.width = width;
-        this.grid = 1;
-        this.s = new Snake(grid, grid);
-        this.foodColor = "#FF0000";
-        this.bombColor = "#000000";
+        this.s = new Snake(GRID_SIZE, GRID_SIZE);
         this.f = createFood();
         this.b = createBomb();
         this.gameOver = false;
@@ -36,36 +35,34 @@ public class Map {
     public void show(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#828282"));
         graphics.fillRectangle(new TerminalPosition(0, 0), new TerminalSize(width, height), ' ');
-        f.show(graphics, grid, grid);
-        s.show(graphics, grid, grid);
-        b.show(graphics, grid, grid);
+        f.show(graphics, GRID_SIZE, GRID_SIZE);
+        s.show(graphics, GRID_SIZE, GRID_SIZE);
+        b.show(graphics, GRID_SIZE, GRID_SIZE);
     }
 
     public void moveSnakeUp(){
-        s.dir(0, -grid);
+        s.dir(0, -GRID_SIZE);
     }
     public void moveSnakeDown(){
-        s.dir(0, grid);
+        s.dir(0, GRID_SIZE);
     }
     public void moveSnakeLeft(){
-        s.dir(-grid, 0);
+        s.dir(-GRID_SIZE, 0);
     }
     public void moveSnakeRight(){
-        s.dir(grid, 0);
+        s.dir(GRID_SIZE, 0);
     }
 
     private boolean checkDeath(){
-        if (s.position.getX()== width) {
+        if (s.position.getX()== width || s.position.getX() == -GRID_SIZE ||
+                s.position.getY() == height || s.position.getY() == -GRID_SIZE) {
             return true;
-        } else if (s.position.getX() == -grid) {
+        }
+       if (inBomb(b.position)){
+           message = "bomb!";
             return true;
-        } else if (s.position.getY() == height) {
-            return true;
-        } else if (s.position.getY() == -grid) {
-            return true;
-        } else if (inBomb(b.position)){
-            return true;
-        } else return s.death();
+        }
+       return s.death();
     }
 
     public void updateSnake(){
@@ -74,7 +71,7 @@ public class Map {
             f = createFood();
         }
         if (checkDeath()){
-            this.gameOver = true;
+            gameOver = true;
         }
     }
 
@@ -84,7 +81,7 @@ public class Map {
 
     public boolean eat(Position position) {
         if (position.equals(s.position)) {
-            s.setTotal(grid);
+            s.setTotal(GRID_SIZE);
             return true;
         }
         return false;
@@ -95,19 +92,33 @@ public class Map {
     }
 
     public Food createFood(){
-        Random rand = new Random();
         int fx = rand.nextInt(width);
         int fy = rand.nextInt(height);
-        return new Food(fx, fy, foodColor);
+        return new Food(fx, fy, FOOD_COLOR);
     }
 
     public Bomb createBomb() {
-        Random rand = new Random();
-        int bx = rand.nextInt(width);
-        int by = rand.nextInt(height);
-        if (bx == f.position.getX() && by == f.position.getY()) {
-            createBomb();
-        }
-        return new Bomb(bx, by, bombColor);
+        int bx, by;
+        do {
+            bx = rand.nextInt(width);
+            by = rand.nextInt(height);
+        } while (bx == f.position.getX() && by == f.position.getY());
+            return new Bomb(bx, by, BOMB_COLOR);
+    }
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public boolean isFood(int x, int y) {
+        return f.getPosition().getX() == x && f.getPosition().getY() == y;
+    }
+
+    public boolean isBomb(int x, int y) {
+        return b.getPosition().getX() == x && b.getPosition().getY() == y;
     }
 }
+

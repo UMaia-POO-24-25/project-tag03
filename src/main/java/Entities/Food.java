@@ -6,6 +6,7 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+import Logic.Position;
 
 
 public class Food extends Arena {
@@ -14,6 +15,7 @@ public class Food extends Arena {
 
     public Food(int x, int y, String color){
         super(x, y);
+        position = new Position(x, y);
         this.color = color;
     }
 
