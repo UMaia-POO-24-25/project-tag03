@@ -18,17 +18,16 @@ public class Game {
 
     public Game() throws IOException {
 
-        int width = 30;
-        int height = 20;
-        this.map = new Map(width, height);
-
-        TerminalSize terminalSize = new TerminalSize(width, height);
-
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
-                .setInitialTerminalSize(terminalSize)
                 .setForceAWTOverSwing(true);
 
         Terminal terminal = terminalFactory.createTerminal();
+        TerminalSize terminalSize = terminal.getTerminalSize();
+
+        int width = terminalSize.getColumns() - 2;
+        int height = terminalSize.getRows() - 3;
+
+        this.map = new Map(width, height);
 
         screen = new TerminalScreen(terminal);
         screen.setCursorPosition(null);
@@ -41,9 +40,22 @@ public class Game {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
 
-
         TerminalSize screenSize = screen.getTerminalSize();
         int width = screenSize.getColumns();
+        int height = screenSize.getRows();
+
+        for (int col = 0; col < width; col++) {
+            graphics.putString(col, 0, "-");
+            graphics.putString( col, height - 1, "-");
+        }
+        for (int row = 1; row < height - 1; row++) {
+            graphics.putString(0, row, "|");
+            graphics.putString(width - 1, row, "|");
+        }
+        graphics.putString(0, 0, "+");
+        graphics.putString(width - 1, 0, "+");
+        graphics.putString(0, height - 1, "+");
+        graphics.putString(width - 1, height - 1, "+");
 
         String header = "Pontuação: " + map.getScore();
         graphics.putString((width - header.length()) / 2, 0, header);
