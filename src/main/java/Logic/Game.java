@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class Game {
     private final Screen screen;
-    public final Map map;
+    private final Map map;
 
     public Game() throws IOException {
 
@@ -64,7 +64,7 @@ public class Game {
         screen.refresh();
     }
 
-    public void gameover() throws IOException {
+    private void gameover() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
 
@@ -139,7 +139,7 @@ public class Game {
         }
     }
 
-    public void processKey(KeyStroke key) throws IOException {
+    private void processKey(KeyStroke key) throws IOException {
         if (key.getKeyType() == KeyType.Character) {
             switch (key.getCharacter()) {
                 case 'w' -> map.moveSnakeUp();
