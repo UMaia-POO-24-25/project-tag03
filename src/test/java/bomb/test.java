@@ -26,7 +26,7 @@ public class test {
 
         map.updateSnake();
         map.s = snake;
-        map.b = bomb;
+
 
         assertTrue(map.inBomb(snake.position), "A colisão com a bomba não foi detectada corretamente.");
     }
