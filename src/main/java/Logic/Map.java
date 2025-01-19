@@ -7,6 +7,9 @@ import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Map {
@@ -20,7 +23,7 @@ public class Map {
     private final int width;
     public Snake s;
     private Food f;
-    public Bomb b;
+    private List<Bomb> b;
     private boolean gameOver;
     public String message;
 
@@ -29,7 +32,7 @@ public class Map {
         this.width = width;
         this.s = new Snake(GRID_SIZE, GRID_SIZE);
         this.f = createFood();
-        this.b = createBomb();
+        this.b = new ArrayList<>();
         this.gameOver = false;
     }
 
@@ -38,7 +41,9 @@ public class Map {
         graphics.fillRectangle(new TerminalPosition(offsetX, offsetY), new TerminalSize(width, height), ' ');
         f.show(graphics, offsetX, offsetY);
         s.show(graphics, offsetX, offsetY);
-        b.show(graphics, offsetX, offsetY);
+        for (Bomb bomb : b) {
+            bomb.show(graphics, offsetX, offsetY);
+        }
     }
 
     public void moveSnakeUp(){
@@ -53,7 +58,9 @@ public class Map {
     public void moveSnakeRight(){
         s.dir(GRID_SIZE, 0);
     }
-
+    public int getBombCount() {
+        return b.size();
+    }    
     private boolean checkDeath(){
         int offsetX = 1;
         int offsetY = 1;
@@ -64,10 +71,12 @@ public class Map {
             return true;
         }
 
-       if (inBomb(b.position)){
-           message = "bomb!";
+       for (Bomb bomb : b) {
+        if (inBomb(bomb.position)) {
+            message = "bomb!";
             return true;
         }
+    }
        return s.death();
     }
 
@@ -83,8 +92,35 @@ public class Map {
 
     public boolean getGameOver(){
         return gameOver;
-    }
+    }  
 
+    public void reset() {
+        this.s = new Snake(GRID_SIZE, GRID_SIZE);
+        this.f = createFood();
+        this.b.clear();
+        this.b.add(createBomb());
+        this.score = 0;
+        this.gameOver = false;
+        this.message = null;
+    }
+    
+    public void addBomb() {
+        Bomb newBomb;
+        boolean positionConflict;
+        do {
+            newBomb = createBomb();
+            Position newPosition = newBomb.getPosition();
+            positionConflict = false;
+            for (Bomb bomb : b) {
+                if (bomb.getPosition().equals(newPosition)) {
+                    positionConflict = true;
+                    break;
+                }
+            }
+        } while (positionConflict);
+        b.add(newBomb);
+    }
+    
     public boolean eat(Position position) {
         if (position.equals(s.position)) {
             s.setTotal(GRID_SIZE);
@@ -118,14 +154,16 @@ public class Map {
     }
 
     public void updateBomb() {
-        int bx, by;
-        do {
-            bx = 1 + rand.nextInt(width - 2);
-            by = 1 + rand.nextInt(height - 2);
-        } while ((bx == f.position.getX() && by == f.position.getY()) ||
-                (bx == s.position.getX() && by == s.position.getY()) ||
-                (Math.abs(bx - s.position.getX()) + Math.abs(by - s.position.getY()) < 5));
-        b.setPosition(new Position(bx, by));
+        for (Bomb bomb : b) {
+            int bx, by;
+            do {
+                bx = 1 + rand.nextInt(width - 2);
+                by = 1 + rand.nextInt(height - 2);
+            } while ((bx == f.position.getX() && by == f.position.getY()) ||
+                    (bx == s.position.getX() && by == s.position.getY()) ||
+                    (Math.abs(bx - s.position.getX()) + Math.abs(by - s.position.getY()) < 5));
+            bomb.setPosition(new Position(bx, by));
+        }
     }
 
     public int getHeight() {
@@ -146,7 +184,7 @@ public class Map {
     }
 
     public boolean isBomb(int x, int y) {
-        return b.getPosition().getX() == x && b.getPosition().getY() == y;
+        return b.stream().anyMatch(bomb -> bomb.getPosition().getX() == x && bomb.getPosition().getY() == y);
     }
 }
 

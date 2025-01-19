@@ -9,15 +9,17 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
-
 import java.io.IOException;
 
 public class Game {
     private final Screen screen;
     private final Map map;
+    private long updateInterval;
+    private int lastScoreForLevelUp;
+    private int level;
+    private int foodEatenSinceLastBomb; 
 
     public Game() throws IOException {
-
         DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory()
                 .setForceAWTOverSwing(true);
 
@@ -33,8 +35,14 @@ public class Game {
         screen.setCursorPosition(null);
         screen.startScreen();
         screen.doResizeIfNecessary();
-    }
 
+        this.updateInterval = 100; 
+        this.map.addBomb(); 
+        this.lastScoreForLevelUp = 0;
+        this.level = 1;
+        this.foodEatenSinceLastBomb = 0;
+
+    }
 
     private void show() throws IOException {
         screen.clear();
@@ -46,7 +54,7 @@ public class Game {
 
         for (int col = 0; col < width; col++) {
             graphics.putString(col, 0, "-");
-            graphics.putString( col, height - 1, "-");
+            graphics.putString(col, height - 1, "-");
         }
         for (int row = 1; row < height - 1; row++) {
             graphics.putString(0, row, "|");
@@ -57,14 +65,128 @@ public class Game {
         graphics.putString(0, height - 1, "+");
         graphics.putString(width - 1, height - 1, "+");
 
-        String header = "Pontuação: " + map.getScore();
+        String header = "Pontuação: " + map.getScore() + "  Nível: " + level;
         graphics.putString((width - header.length()) / 2, 0, header);
 
         map.show(graphics, 1, 1);
         screen.refresh();
     }
 
-    private void gameover() throws IOException {
+
+    private void increaseLevel() {
+        if (map.getScore() > lastScoreForLevelUp) {
+            lastScoreForLevelUp = map.getScore();
+            foodEatenSinceLastBomb++;
+            if (foodEatenSinceLastBomb == 5) {
+                if (map.getBombCount() < 15) {
+                    map.addBomb(); 
+                }
+                foodEatenSinceLastBomb = 0; 
+            }
+            if (map.getScore() % 5 == 0) {
+                level++;
+                updateInterval = Math.max(50, updateInterval - 10);
+            }
+        }
+    }
+    
+    
+    
+
+    private void startScreen() throws IOException {
+        screen.clear();
+        TextGraphics graphics = screen.newTextGraphics();
+
+        TerminalSize screenSize = screen.getTerminalSize();
+        int width = screenSize.getColumns();
+        int height = screenSize.getRows();
+
+        for (int col = 0; col < width; col++) {
+            graphics.putString(col, 0, "-");
+            graphics.putString(col, height - 1, "-");
+        }
+        for (int row = 1; row < height - 1; row++) {
+            graphics.putString(0, row, "|");
+            graphics.putString(width - 1, row, "|");
+        }
+        graphics.putString(0, 0, "+");
+        graphics.putString(width - 1, 0, "+");
+        graphics.putString(0, height - 1, "+");
+        graphics.putString(width - 1, height - 1, "+");
+
+        String title = " Bem-vindo ao Jogo da Cobra ";
+        String optionStart = " Pressione 'S' para iniciar o jogo ";
+        String optionExit = " Pressione 'Q' para sair ";
+
+        graphics.putString((width - title.length()) / 2, height / 2 - 2, title);
+        graphics.putString((width - optionStart.length()) / 2, height / 2, optionStart);
+        graphics.putString((width - optionExit.length()) / 2, height / 2 + 2, optionExit);
+
+        screen.refresh();
+
+        while (true) {
+            KeyStroke key = screen.readInput();
+            if (key != null) {
+                if (key.getKeyType() == KeyType.Character) {
+                    char c = key.getCharacter();
+                    if (c == 's' || c == 'S') {
+                        return;
+                    } else if (c == 'q' || c == 'Q') {
+                        screen.close();
+                        System.exit(0);
+                    }
+                }
+            }
+        }
+    }
+
+    public void run() throws IOException {
+        startScreen();
+
+        long lastUpdate = System.currentTimeMillis();
+        long lastBombUpdate = System.currentTimeMillis();
+        long bombUpdateInterval = 3000;
+
+        while (true) {
+            long now = System.currentTimeMillis();
+            if (now - lastUpdate >= updateInterval) {
+                map.updateSnake();
+                show();
+                increaseLevel();
+                lastUpdate = now;
+
+                if (map.getGameOver()) {
+                    if (gameover()) {
+                        map.reset();
+                        level = 1;
+                        updateInterval = 150;
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            if (now - lastBombUpdate >= bombUpdateInterval) {
+                map.updateBomb();
+                show();
+                lastBombUpdate = now;
+            }
+
+            KeyStroke key = screen.pollInput();
+            if (key != null) {
+                processKey(key);
+            }
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean gameover() throws IOException {
         screen.clear();
         TextGraphics graphics = screen.newTextGraphics();
 
@@ -86,55 +208,35 @@ public class Game {
         graphics.putString(width - 1, height - 1, "+");
 
         String title = " GAME OVER! ";
-        String instruction = " Pressione qualquer tecla para sair... ";
+        String scoreMessage = " Sua pontuação: " + map.getScore() + "  Nível: " + level;
+        String restartOption = " Pressione 'R' para reiniciar ou 'Q' para sair ";
+
         int titleX = (width - title.length()) / 2;
-        int titleY = height / 2 - 1;
-        int instructionX = (width - instruction.length()) / 2;
-        int instructionY = height / 2 + 1;
+        int scoreX = (width - scoreMessage.length()) / 2;
+        int restartX = (width - restartOption.length()) / 2;
+
+        int titleY = height / 2 - 2;
+        int scoreY = height / 2;
+        int restartY = height / 2 + 2;
 
         graphics.putString(titleX, titleY, title);
-        graphics.putString(instructionX, instructionY, instruction);
+        graphics.putString(scoreX, scoreY, scoreMessage);
+        graphics.putString(restartX, restartY, restartOption);
 
         screen.refresh();
 
-        screen.readInput();
-        screen.close();
-    }
-
-    public void run() throws IOException {
-        long lastUpdate = System.currentTimeMillis();
-        long lastBombUpdate = System.currentTimeMillis();
-        long updateInterval = 100;
-        long bombUpdateInterval = 3000;
-
         while (true) {
-            long now = System.currentTimeMillis();
-            if (now - lastUpdate >= updateInterval) {
-                map.updateSnake();
-                show();
-                lastUpdate = now;
-
-                if (map.getGameOver()) {
-                    gameover();
-                    break;
-                }
-            }
-
-            if (now - lastBombUpdate >= bombUpdateInterval) {
-                map.updateBomb();
-                show();
-                lastBombUpdate = now;
-            }
-
-            KeyStroke key = screen.pollInput();
+            KeyStroke key = screen.readInput();
             if (key != null) {
-                processKey(key);
-            }
-
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                if (key.getKeyType() == KeyType.Character) {
+                    char c = key.getCharacter();
+                    if (c == 'r' || c == 'R') {
+                        return true;
+                    } else if (c == 'q' || c == 'Q') {
+                        screen.close();
+                        System.exit(0);
+                    }
+                }
             }
         }
     }
