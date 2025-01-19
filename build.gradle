@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'info.solidsoft.pitest' version '1.15.0' // Use a versão mais recente do plugin
 }
 
 group = 'org.example'
@@ -10,12 +11,20 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'com.googlecode.lanterna', name: 'lanterna', version: '3.1.1'
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.mockito:mockito-core:5.5.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'com.googlecode.lanterna:lanterna:3.1.1' // Dependência do projeto
+    testImplementation platform('org.junit:junit-bom:5.10.0') // BOM do JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter'      // JUnit 5
+    testImplementation 'org.mockito:mockito-core:5.5.0'       // Mockito
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform() // Configuração para usar o JUnit 5
+}
+
+pitest {
+    junit5PluginVersion = '1.0.0'  // Versão atual do plugin JUnit 5 para PIT
+    targetClasses = ['org.example.*'] // Classes que serão alvo de mutações
+    threads = 4                      // Paralelismo para testes
+    outputFormats = ['XML', 'HTML']  // Formatos de saída dos relatórios
+    timestampedReports = false       // Relatórios sem timestamp
 }
